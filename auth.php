@@ -41,16 +41,6 @@ class auth_plugin_emailasusername extends auth_plugin_base {
     const WANTSURL_PREFERENCE = 'auth_emailasusername_wantsurl';
 
     /**
-     * Preference name used before this plugin owned the data.
-     *
-     * Releases up to 2.0.0 wrote the signup URL under core auth_email's own
-     * preference key. Accounts registered under one of those releases and not yet
-     * confirmed still carry it, so it is read once and removed. Remove this
-     * constant and its fallback in the release after the one that introduces it.
-     */
-    const LEGACY_WANTSURL_PREFERENCE = 'auth_email_wantsurl';
-
-    /**
      * Constructor.
      */
     public function __construct() {
@@ -210,12 +200,6 @@ class auth_plugin_emailasusername extends auth_plugin_base {
                 // Ensure user gets returned to page they were trying to access before signing up.
                 if ($wantsurl = get_user_preferences(self::WANTSURL_PREFERENCE, false, $user)) {
                     unset_user_preference(self::WANTSURL_PREFERENCE, $user);
-                } else if ($wantsurl = get_user_preferences(self::LEGACY_WANTSURL_PREFERENCE, false, $user)) {
-                    // Registered under a release that stored this under core's key.
-                    unset_user_preference(self::LEGACY_WANTSURL_PREFERENCE, $user);
-                }
-
-                if ($wantsurl) {
                     $SESSION->wantsurl = $wantsurl;
                 }
 
