@@ -25,7 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'auth_emailasusername';
-$plugin->version   = 2025102200;
+$plugin->version   = 2026090800;
+// TODO: $plugin->requires must be raised to the Moodle 5.2.2 value, read from
+// public/version.php on MOODLE_502_STABLE. The value below is Moodle 4.4's and
+// contradicts what this plugin now supports.
 $plugin->requires  = 2024042200;
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '2.0.0';
+$plugin->maturity  = MATURITY_ALPHA;
+$plugin->release   = '2.1.0';
