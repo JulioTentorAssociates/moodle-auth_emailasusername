@@ -112,18 +112,16 @@ class login_signup_form extends moodleform implements renderable, templatable {
             }
         }
 
-        // Validate username characters before checking if user exists.
-        if ($DB->record_exists('user', array('username'=>$data['username'], 'mnethostid'=>$CFG->mnet_localhost_id))) {
+        // Check the allowed characters in the username (which is the email address)
+        // before checking whether it is already taken: reporting "that address is
+        // taken" for a value that could never have been stored is misleading.
+        if ($data['username'] !== core_text::strtolower($data['username'])) {
+            $errors['username'] = get_string('usernamelowercase');
+        } else if ($data['username'] !== clean_param($data['username'], PARAM_USERNAME)) {
+            $errors['username'] = get_string('invalidusername');
+        } else if ($DB->record_exists('user', ['username' => $data['username'],
+                'mnethostid' => $CFG->mnet_localhost_id])) {
             $errors['username'] = get_string('usernameexists');
-        } else {
-            // Check allowed characters in username (which is the email).
-            if ($data['username'] !== core_text::strtolower($data['username'])) {
-                $errors['username'] = get_string('usernamelowercase');
-            } else {
-                if ($data['username'] !== clean_param($data['username'], PARAM_USERNAME)) {
-                    $errors['username'] = get_string('invalidusername');
-                }
-            }
         }
 
         // Check to see if the user already exists in external auth.
