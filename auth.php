@@ -196,9 +196,12 @@ class auth_plugin_emailasusername extends auth_plugin_base {
 
                 return AUTH_CONFIRM_OK;
             }
-        } else {
-            return AUTH_CONFIRM_ERROR;
         }
+
+        // No user, or the secret did not match: everything else is an error.
+        // Falling off the end here would return null, which matches none of the
+        // AUTH_CONFIRM_* constants the callers compare against.
+        return AUTH_CONFIRM_ERROR;
     }
 
     public function prevent_local_passwords() {
