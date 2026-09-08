@@ -135,7 +135,9 @@ class login_signup_form extends moodleform implements renderable, templatable {
         if (!validate_email($data['email'])) {
             $errors['email'] = get_string('invalidemail');
         } else if ($DB->record_exists('user', array('email'=>$data['email']))) {
-            $errors['email'] = get_string('emailexists').' <a href="/login/forgot_password.php">'.get_string('newpassword').'?</a>';
+            $forgotpassword = new moodle_url('/login/forgot_password.php');
+            $errors['email'] = get_string('emailexists') . ' <a href="' . $forgotpassword->out() . '">' .
+                get_string('newpassword') . '?</a>';
         }
 
         // Ensure username matches email.
