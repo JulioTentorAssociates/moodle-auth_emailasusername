@@ -289,5 +289,3 @@ class auth_plugin_emailasusername extends auth_plugin_base {
     }
 
 }
-
-

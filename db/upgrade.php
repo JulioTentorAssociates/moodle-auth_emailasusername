@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Database upgrade steps.
  *
  * @package    auth_emailasusername
  * @copyright  2017 onwards David Pesce (http://exputo.com)
@@ -23,6 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+
 /**
  * Function to upgrade auth_emailasusername.
  * @param int $oldversion the version we are upgrading from

@@ -28,7 +28,17 @@ require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot.'/user/profile/lib.php');
 require_once($CFG->dirroot . '/user/editlib.php');
 
+/**
+ * Signup form presenting the email address as the username.
+ *
+ * @copyright  2016 onwards David Pesce (http://exputo.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class login_signup_form extends moodleform implements renderable, templatable {
+
+    /**
+     * Define the form.
+     */
     public function definition() {
         global $USER, $CFG;
 
@@ -46,7 +56,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
         $mform->setForceLtr('email');
 
         // Password policy info.
-        if (!empty($CFG->passwordpolicy)){
+        if (!empty($CFG->passwordpolicy)) {
             $mform->addElement('static', 'passwordpolicyinfo', '', print_password_policy());
         }
 
@@ -54,7 +64,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
         $mform->addElement('password', 'password', get_string('password'), [
             'maxlength' => MAX_PASSWORD_CHARACTERS,
             'size' => 12,
-            'autocomplete' => 'new-password'
+            'autocomplete' => 'new-password',
         ]);
         $mform->setType('password', core_user::get_property_type('password'));
         $mform->addRule('password', get_string('missingpassword'), 'required', null, 'client');
@@ -89,12 +99,15 @@ class login_signup_form extends moodleform implements renderable, templatable {
         $manager = new \core_privacy\local\sitepolicy\manager();
         $manager->signup_form($mform);
 
-        // buttons
+        // Buttons.
         $this->set_display_vertical();
         $this->add_action_buttons(true, get_string('createaccount'));
 
     }
 
+    /**
+     * Trim the values the user typed before they are validated.
+     */
     public function definition_after_data() {
         $mform = $this->_form;
         $mform->applyFilter('username', 'trim');
@@ -105,6 +118,13 @@ class login_signup_form extends moodleform implements renderable, templatable {
         }
     }
 
+    /**
+     * Validate the submitted values.
+     *
+     * @param array $data Submitted data.
+     * @param array $files Submitted files.
+     * @return array Errors keyed by form element name.
+     */
     public function validation($data, $files) {
         global $CFG, $DB;
 
@@ -190,7 +210,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
         $formhtml = ob_get_contents();
         ob_end_clean();
         $context = [
-            'formhtml' => $formhtml
+            'formhtml' => $formhtml,
         ];
         return $context;
     }
