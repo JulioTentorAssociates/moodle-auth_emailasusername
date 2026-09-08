@@ -32,4 +32,5 @@ $string['auth_emailasusername_email'] = 'Email address';
 $string['auth_emailasusername_emailconfirm'] = 'Email address (again)';
 $string['auth_emailasusername_emailmissing'] = 'Missing email address';
 $string['auth_emailasusername_emailmismatch'] = 'Email addresses do not match';
-$string['privacy:metadata'] = 'The Email-based self-registration authentication plugin does not store any personal data.';
+$string['privacy:metadata:preference:wantsurl'] = 'The address the user was trying to reach when they created their account, kept so they can be returned there once they confirm it. Removed at confirmation.';
+$string['privacy:preference:wantsurl'] = 'The page you were trying to reach when you created your account.';

@@ -19,103 +19,70 @@
  *
  * @package    auth_emailasusername
  * @copyright  2024 David Pesce (http://exputo.com)
+ * @copyright  2026 onwards Julio Tentor & Associates
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace auth_emailasusername\privacy;
 
 use core_privacy\local\metadata\collection;
-use core_privacy\local\request\approved_contextlist;
-use core_privacy\local\request\approved_userlist;
-use core_privacy\local\request\contextlist;
-use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 
 /**
  * Privacy provider for the emailasusername authentication plugin.
  *
+ * The only personal data this plugin stores of its own is a single user
+ * preference, written at signup and removed at confirmation, so the provider
+ * follows the shape core uses for the same case (see core_editor).
+ *
  * @copyright  2024 David Pesce (http://exputo.com)
+ * @copyright  2026 onwards Julio Tentor & Associates
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-    // This plugin does not store any personal user data.
+    // This plugin stores one user preference and no other personal data.
     \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\plugin\provider {
+    \core_privacy\local\request\user_preference_provider {
 
     /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
+     * Name of the preference this plugin stores.
      *
-     * @return  string
+     * Repeated from auth_plugin_emailasusername::WANTSURL_PREFERENCE rather than
+     * referenced: auth.php is not autoloaded, and this class must not depend on it
+     * having been included.
      */
-    public static function get_reason(): string {
-        return 'privacy:metadata';
-    }
+    const WANTSURL_PREFERENCE = 'auth_emailasusername_wantsurl';
 
     /**
-     * Get metadata about data stored for this plugin.
+     * Describe the personal data this plugin stores.
      *
-     * @param   collection $collection The initialised collection to add items to.
-     * @return  collection A listing of user data stored through this system.
+     * @param collection $collection The initialised collection to add items to.
+     * @return collection A listing of user data stored through this system.
      */
     public static function get_metadata(collection $collection): collection {
-        // This plugin does not store personal data directly.
-        // User authentication data is handled by core Moodle user system.
+        $collection->add_user_preference(
+            self::WANTSURL_PREFERENCE,
+            'privacy:metadata:preference:wantsurl'
+        );
+
         return $collection;
     }
 
     /**
-     * Get the list of contexts that contain user information for the specified user.
+     * Export the user preference stored by this plugin.
      *
-     * @param   int $userid The user to search.
-     * @return  contextlist The contextlist containing the list of contexts used in this plugin.
+     * @param int $userid The user whose preferences are being exported.
      */
-    public static function get_contexts_for_userid(int $userid): contextlist {
-        return new contextlist();
-    }
+    public static function export_user_preferences(int $userid) {
+        $wantsurl = get_user_preferences(self::WANTSURL_PREFERENCE, null, $userid);
 
-    /**
-     * Get the list of users who have data within a context.
-     *
-     * @param   userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
-     */
-    public static function get_users_in_context(userlist $userlist) {
-        // This plugin does not store user-specific data.
-    }
-
-    /**
-     * Export all user data for the specified user, in the specified contexts.
-     *
-     * @param   approved_contextlist $contextlist The approved contexts to export information for.
-     */
-    public static function export_user_data(approved_contextlist $contextlist) {
-        // This plugin does not store user-specific data to export.
-    }
-
-    /**
-     * Delete all data for all users in the specified context.
-     *
-     * @param   \context $context The specific context to delete data for.
-     */
-    public static function delete_data_for_all_users_in_context(\context $context) {
-        // This plugin does not store user-specific data to delete.
-    }
-
-    /**
-     * Delete all user data for the specified user, in the specified contexts.
-     *
-     * @param   approved_contextlist $contextlist The approved contexts and user information to delete information for.
-     */
-    public static function delete_data_for_user(approved_contextlist $contextlist) {
-        // This plugin does not store user-specific data to delete.
-    }
-
-    /**
-     * Delete multiple users within a single context.
-     *
-     * @param   approved_userlist $userlist The approved context and user information to delete information for.
-     */
-    public static function delete_data_for_users(approved_userlist $userlist) {
-        // This plugin does not store user-specific data to delete.
+        if ($wantsurl !== null) {
+            writer::export_user_preference(
+                'auth_emailasusername',
+                self::WANTSURL_PREFERENCE,
+                $wantsurl,
+                get_string('privacy:preference:wantsurl', 'auth_emailasusername')
+            );
+        }
     }
 }

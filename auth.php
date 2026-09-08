@@ -32,6 +32,25 @@ require_once($CFG->libdir.'/authlib.php');
 class auth_plugin_emailasusername extends auth_plugin_base {
 
     /**
+     * User preference holding the URL the user was trying to reach when they signed up.
+     *
+     * Declared in this plugin's privacy provider. The literal is repeated there
+     * because this class is not autoloaded and the provider must not depend on it
+     * having been included.
+     */
+    const WANTSURL_PREFERENCE = 'auth_emailasusername_wantsurl';
+
+    /**
+     * Preference name used before this plugin owned the data.
+     *
+     * Releases up to 2.0.0 wrote the signup URL under core auth_email's own
+     * preference key. Accounts registered under one of those releases and not yet
+     * confirmed still carry it, so it is read once and removed. Remove this
+     * constant and its fallback in the release after the one that introduces it.
+     */
+    const LEGACY_WANTSURL_PREFERENCE = 'auth_email_wantsurl';
+
+    /**
      * Constructor.
      */
     public function __construct() {
@@ -125,7 +144,7 @@ class auth_plugin_emailasusername extends auth_plugin_base {
 
         // Save wantsurl against user's profile, so we can return them there upon confirmation.
         if (!empty($SESSION->wantsurl)) {
-            set_user_preference('auth_email_wantsurl', $SESSION->wantsurl, $user);
+            set_user_preference(self::WANTSURL_PREFERENCE, $SESSION->wantsurl, $user);
         }
 
         // Trigger event.
@@ -188,10 +207,16 @@ class auth_plugin_emailasusername extends auth_plugin_base {
             } else if ($user->secret === $confirmsecret) {   // They have provided the secret key to get in
                 $DB->set_field("user", "confirmed", 1, array("id"=>$user->id));
 
-                if ($wantsurl = get_user_preferences('auth_email_wantsurl', false, $user)) {
-                    // Ensure user gets returned to page they were trying to access before signing up.
+                // Ensure user gets returned to page they were trying to access before signing up.
+                if ($wantsurl = get_user_preferences(self::WANTSURL_PREFERENCE, false, $user)) {
+                    unset_user_preference(self::WANTSURL_PREFERENCE, $user);
+                } else if ($wantsurl = get_user_preferences(self::LEGACY_WANTSURL_PREFERENCE, false, $user)) {
+                    // Registered under a release that stored this under core's key.
+                    unset_user_preference(self::LEGACY_WANTSURL_PREFERENCE, $user);
+                }
+
+                if ($wantsurl) {
                     $SESSION->wantsurl = $wantsurl;
-                    unset_user_preference('auth_email_wantsurl', $user);
                 }
 
                 return AUTH_CONFIRM_OK;
