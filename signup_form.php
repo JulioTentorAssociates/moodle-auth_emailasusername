@@ -129,18 +129,19 @@ class login_signup_form extends moodleform implements renderable, templatable {
             $errors['username'] = get_string('usernameexists');
         }
 
-        // Validate the email field.
+        // Validate the email field. The username is the email address, so the two
+        // fields must agree; that is checked before the address is looked up, and
+        // the whole chain is a single if/else so that a later test cannot overwrite
+        // the error reported by an earlier one.
         if (!validate_email($data['email'])) {
             $errors['email'] = get_string('invalidemail');
-        } else if ($DB->record_exists('user', array('email'=>$data['email']))) {
+        } else if ($data['username'] !== $data['email']) {
+            $errors['email'] = get_string('auth_emailasusername_emailmismatch', 'auth_emailasusername');
+        } else if ($DB->record_exists('user', ['email' => $data['email'],
+                'mnethostid' => $CFG->mnet_localhost_id])) {
             $forgotpassword = new moodle_url('/login/forgot_password.php');
             $errors['email'] = get_string('emailexists') . ' <a href="' . $forgotpassword->out() . '">' .
                 get_string('newpassword') . '?</a>';
-        }
-
-        // Ensure username matches email.
-        if ($data['username'] != $data['email']) {
-            $errors['email'] = get_string('auth_emailasusername_emailmismatch', 'auth_emailasusername');
         }
 
         // Check if email is allowed.
