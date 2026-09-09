@@ -18,6 +18,7 @@
  * Authentication Plugin: Email Username Authentication
  *
  * @copyright  2016 onwards David Pesce (http://exputo.com)
+ * @copyright  2026 Julio Tentor & Associates <https://juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package auth_emailasusername
  */

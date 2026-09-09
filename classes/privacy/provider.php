@@ -19,7 +19,8 @@
  *
  * @package    auth_emailasusername
  * @copyright  2024 David Pesce (http://exputo.com)
- * @copyright  2026 onwards Julio Tentor & Associates
+ * @copyright  2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author     Julio Tentor <jtentor@juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -36,7 +37,8 @@ use core_privacy\local\request\writer;
  * follows the shape core uses for the same case (see core_editor).
  *
  * @copyright  2024 David Pesce (http://exputo.com)
- * @copyright  2026 onwards Julio Tentor & Associates
+ * @copyright  2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author     Julio Tentor <jtentor@juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements

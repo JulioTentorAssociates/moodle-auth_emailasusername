@@ -19,6 +19,7 @@
  *
  * @package    auth_emailasusername
  * @copyright  2016 onwards David Pesce (http://exputo.com)
+ * @copyright  2026 Julio Tentor & Associates <https://juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,9 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'auth_emailasusername';
 $plugin->version   = 2026090800;
-// TODO: $plugin->requires must be raised to the Moodle 5.2.2 value, read from
-// public/version.php on MOODLE_502_STABLE. The value below is Moodle 4.4's and
-// contradicts what this plugin now supports.
-$plugin->requires  = 2024042200;
+$plugin->requires  = 2026042002; // Moodle 5.2.2.
+$plugin->supported = [502, 502];
 $plugin->maturity  = MATURITY_ALPHA;
 $plugin->release   = '2.1.0';

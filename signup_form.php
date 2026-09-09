@@ -18,6 +18,7 @@
  * Authentication Plugin: Email As Username Authentication
  *
  * @copyright  2016 onwards David Pesce (http://exputo.com)
+ * @copyright  2026 Julio Tentor & Associates <https://juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package auth_emailasusername
  */
@@ -32,6 +33,7 @@ require_once($CFG->dirroot . '/user/editlib.php');
  * Signup form presenting the email address as the username.
  *
  * @copyright  2016 onwards David Pesce (http://exputo.com)
+ * @copyright  2026 Julio Tentor & Associates <https://juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class login_signup_form extends moodleform implements renderable, templatable {

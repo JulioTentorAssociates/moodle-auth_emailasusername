@@ -19,6 +19,7 @@
  *
  * @package    auth_emailasusername
  * @copyright  2017 onwards David Pesce (http://exputo.com)
+ * @copyright  2026 Julio Tentor & Associates <https://juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
