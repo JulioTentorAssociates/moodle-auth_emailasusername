@@ -41,7 +41,6 @@ use core_privacy\local\request\writer;
  * @author     Julio Tentor <jtentor@juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-// This plugin stores one user preference and no other personal data.
 class provider implements
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\user_preference_provider {

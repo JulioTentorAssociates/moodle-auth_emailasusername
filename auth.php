@@ -25,13 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir.'/authlib.php');
+require_once($CFG->libdir . '/authlib.php');
 
 /**
  * Email username authentication plugin.
  */
 class auth_plugin_emailasusername extends auth_plugin_base {
-
     /**
      * User preference holding the URL the user was trying to reach when they signed up.
      *
@@ -61,7 +60,7 @@ class auth_plugin_emailasusername extends auth_plugin_base {
      */
     public function user_login($username, $password) {
         global $CFG, $DB;
-        if ($user = $DB->get_record('user', array('username'=>$username, 'mnethostid'=>$CFG->mnet_localhost_id))) {
+        if ($user = $DB->get_record('user', ['username' => $username, 'mnethostid' => $CFG->mnet_localhost_id])) {
             return validate_internal_user_password($user, $password);
         }
         return false;
@@ -101,7 +100,7 @@ class auth_plugin_emailasusername extends auth_plugin_base {
      * @param object $user new user object
      * @param boolean $notify print notice with link and terminate
      */
-    public function user_signup($user, $notify=true) {
+    public function user_signup($user, $notify = true) {
         // Standard signup, without custom confirmatinurl.
         return $this->user_signup_with_confirmation($user, $notify);
     }
@@ -120,10 +119,10 @@ class auth_plugin_emailasusername extends auth_plugin_base {
      * @throws moodle_exception
      * @since Moodle 3.2
      */
-    public function user_signup_with_confirmation($user, $notify=true, $confirmationurl = null) {
+    public function user_signup_with_confirmation($user, $notify = true, $confirmationurl = null) {
         global $CFG, $DB, $SESSION;
-        require_once($CFG->dirroot.'/user/profile/lib.php');
-        require_once($CFG->dirroot.'/user/lib.php');
+        require_once($CFG->dirroot . '/user/profile/lib.php');
+        require_once($CFG->dirroot . '/user/lib.php');
 
         $plainpassword = $user->password;
         $user->password = hash_internal_user_password($user->password);
@@ -171,7 +170,7 @@ class auth_plugin_emailasusername extends auth_plugin_base {
         global $CFG;
 
         require_once($CFG->dirroot . "/auth/emailasusername/signup_form.php");
-        return new login_signup_form(null, null, 'post', '', array('autocomplete'=>'on'));
+        return new login_signup_form(null, null, 'post', '', ['autocomplete' => 'on']);
     }
 
     /**
@@ -196,12 +195,10 @@ class auth_plugin_emailasusername extends auth_plugin_base {
         if (!empty($user)) {
             if ($user->auth != $this->authtype) {
                 return AUTH_CONFIRM_ERROR;
-
             } else if ($user->secret === $confirmsecret && $user->confirmed) {
                 return AUTH_CONFIRM_ALREADY;
-
             } else if ($user->secret === $confirmsecret) {   // They have provided the secret key to get in.
-                $DB->set_field("user", "confirmed", 1, array("id"=>$user->id));
+                $DB->set_field("user", "confirmed", 1, ["id" => $user->id]);
 
                 // Ensure user gets returned to page they were trying to access before signing up.
                 if ($wantsurl = get_user_preferences(self::WANTSURL_PREFERENCE, false, $user)) {
@@ -282,5 +279,4 @@ class auth_plugin_emailasusername extends auth_plugin_base {
     public function is_captcha_enabled() {
         return get_config("auth_{$this->authtype}", 'recaptcha');
     }
-
 }

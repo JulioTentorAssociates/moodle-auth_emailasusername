@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir.'/formslib.php');
-require_once($CFG->dirroot.'/user/profile/lib.php');
+require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot . '/user/profile/lib.php');
 require_once($CFG->dirroot . '/user/editlib.php');
 
 /**
@@ -37,7 +37,6 @@ require_once($CFG->dirroot . '/user/editlib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class login_signup_form extends moodleform implements renderable, templatable {
-
     /**
      * Define the form.
      */
@@ -47,22 +46,36 @@ class login_signup_form extends moodleform implements renderable, templatable {
         $mform = $this->_form;
 
         // Username field overriden as the email address.
-        $mform->addElement('text', 'username',
+        $mform->addElement(
+            'text',
+            'username',
             get_string('auth_emailasusername_email', 'auth_emailasusername'),
-            'maxlength="100" size="35" autocapitalize="none"');
+            'maxlength="100" size="35" autocapitalize="none"'
+        );
         $mform->setType('username', PARAM_NOTAGS);
-        $mform->addRule('username',
+        $mform->addRule(
+            'username',
             get_string('auth_emailasusername_emailmissing', 'auth_emailasusername'),
-            'required', null, 'client');
+            'required',
+            null,
+            'client'
+        );
 
         // Email confirmation field.
-        $mform->addElement('text', 'email',
+        $mform->addElement(
+            'text',
+            'email',
             get_string('auth_emailasusername_emailconfirm', 'auth_emailasusername'),
-            'maxlength="100" size="35"');
+            'maxlength="100" size="35"'
+        );
         $mform->setType('email', core_user::get_property_type('email'));
-        $mform->addRule('email',
+        $mform->addRule(
+            'email',
             get_string('auth_emailasusername_emailmissing', 'auth_emailasusername'),
-            'required', null, 'client');
+            'required',
+            null,
+            'client'
+        );
         $mform->setForceLtr('email');
 
         // Password policy info.
@@ -78,9 +91,13 @@ class login_signup_form extends moodleform implements renderable, templatable {
         ]);
         $mform->setType('password', core_user::get_property_type('password'));
         $mform->addRule('password', get_string('missingpassword'), 'required', null, 'client');
-        $mform->addRule('password', get_string('maximumchars', '', MAX_PASSWORD_CHARACTERS),
-            'maxlength', MAX_PASSWORD_CHARACTERS, 'client');
-
+        $mform->addRule(
+            'password',
+            get_string('maximumchars', '', MAX_PASSWORD_CHARACTERS),
+            'maxlength',
+            MAX_PASSWORD_CHARACTERS,
+            'client'
+        );
 
         $namefields = useredit_get_required_name_fields();
         foreach ($namefields as $field) {
@@ -112,7 +129,6 @@ class login_signup_form extends moodleform implements renderable, templatable {
         // Buttons.
         $this->set_display_vertical();
         $this->add_action_buttons(true, get_string('createaccount'));
-
     }
 
     /**
@@ -191,11 +207,13 @@ class login_signup_form extends moodleform implements renderable, templatable {
             // With $CFG->extendedusernamechars off, that includes '+', which is
             // ordinary in addresses. See the note in settings.php.
             $errors['username'] = get_string('auth_emailasusername_addressnotallowed', 'auth_emailasusername');
-        } else if ($DB->record_exists('user', ['username' => $data['username'],
+        } else if (
+            $DB->record_exists('user', ['username' => $data['username'],
                 'mnethostid' => $CFG->mnet_localhost_id])
                 || $DB->record_exists('user', ['email' => $data['username'],
                 'mnethostid' => $CFG->mnet_localhost_id])
-                || $authplugin->user_exists($data['username'])) {
+                || $authplugin->user_exists($data['username'])
+        ) {
             // Report this as an address that already has an account, not as a
             // username clash: the person has no notion of a username here, and
             // telling them to pick another one leaves them with nowhere to go.
@@ -240,5 +258,4 @@ class login_signup_form extends moodleform implements renderable, templatable {
         ];
         return $context;
     }
-
 }
