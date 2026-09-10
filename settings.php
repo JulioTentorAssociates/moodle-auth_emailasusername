@@ -26,6 +26,18 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
 
+    // Addresses containing characters Moodle does not allow in a username - '+'
+    // most commonly - are refused at signup unless extended username characters
+    // are enabled site wide. That setting is core's and affects every
+    // authentication method, so it is surfaced here rather than changed here.
+    if (empty($CFG->extendedusernamechars)) {
+        $settings->add(new admin_setting_description(
+            'auth_emailasusername/extendedcharsnotice',
+            get_string('auth_emailasusername_extendedchars', 'auth_emailasusername'),
+            get_string('auth_emailasusername_extendedchars_desc', 'auth_emailasusername')
+        ));
+    }
+
     // Introductory explanation.
     $settings->add(new admin_setting_heading('auth_emailasusername/pluginname', '',
         new lang_string('auth_emailasusername_description', 'auth_emailasusername')));

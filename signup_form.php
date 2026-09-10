@@ -108,16 +108,35 @@ class login_signup_form extends moodleform implements renderable, templatable {
     }
 
     /**
-     * Trim the values the user typed before they are validated.
+     * Normalise the values the user typed before they are validated.
+     *
+     * Both address fields are trimmed and lower-cased. Moodle requires usernames to
+     * be lower case, and the username here is the address, so an address typed with
+     * capitals would otherwise be rejected for a reason that has nothing to do with
+     * the address being wrong. The domain part is case-insensitive and mail servers
+     * treat the local part case-insensitively in practice, so folding case is safe.
      */
     public function definition_after_data() {
         $mform = $this->_form;
         $mform->applyFilter('username', 'trim');
+        $mform->applyFilter('email', 'trim');
+        $mform->applyFilter('username', [$this, 'normalise_address']);
+        $mform->applyFilter('email', [$this, 'normalise_address']);
 
         // Trim required name fields.
         foreach (useredit_get_required_name_fields() as $field) {
             $mform->applyFilter($field, 'trim');
         }
+    }
+
+    /**
+     * Fold an address to lower case.
+     *
+     * @param string $value The submitted value.
+     * @return string The value in lower case.
+     */
+    public function normalise_address($value) {
+        return core_text::strtolower($value);
     }
 
     /**
@@ -148,42 +167,39 @@ class login_signup_form extends moodleform implements renderable, templatable {
             }
         }
 
-        // Check the allowed characters in the username (which is the email address)
-        // before checking whether it is already taken: reporting "that address is
-        // taken" for a value that could never have been stored is misleading.
-        if ($data['username'] !== core_text::strtolower($data['username'])) {
-            $errors['username'] = get_string('usernamelowercase');
-        } else if ($data['username'] !== clean_param($data['username'], PARAM_USERNAME)) {
-            $errors['username'] = get_string('invalidusername');
-        } else if ($DB->record_exists('user', ['username' => $data['username'],
-                'mnethostid' => $CFG->mnet_localhost_id])) {
-            $errors['username'] = get_string('usernameexists');
-        }
-
-        // Check to see if the user already exists in external auth.
-        if (!isset($errors['username']) && $authplugin->user_exists($data['username'])) {
-            $errors['username'] = get_string('usernameexists');
-        }
-
-        // Validate the email field. The username is the email address, so the two
-        // fields must agree; that is checked before the address is looked up, and
-        // the whole chain is a single if/else so that a later test cannot overwrite
-        // the error reported by an earlier one.
-        if (!validate_email($data['email'])) {
-            $errors['email'] = get_string('invalidemail');
-        } else if ($data['username'] !== $data['email']) {
+        // The second field only confirms the first, so it is checked on its own and
+        // everything else is reported against the field the address was typed into.
+        if ($data['username'] !== $data['email']) {
             $errors['email'] = get_string('auth_emailasusername_emailmismatch', 'auth_emailasusername');
-        } else if ($DB->record_exists('user', ['email' => $data['email'],
-                'mnethostid' => $CFG->mnet_localhost_id])) {
+        }
+
+        // Validate the address itself. The order matters: an address that is
+        // malformed, or that this site could never store as a username, must be
+        // reported as such rather than looked up and reported as already taken.
+        if (!validate_email($data['username'])) {
+            $errors['username'] = get_string('invalidemail');
+        } else if ($data['username'] !== clean_param($data['username'], PARAM_USERNAME)) {
+            // The address contains a character Moodle will not accept in a username.
+            // With $CFG->extendedusernamechars off, that includes '+', which is
+            // ordinary in addresses. See the note in settings.php.
+            $errors['username'] = get_string('auth_emailasusername_addressnotallowed', 'auth_emailasusername');
+        } else if ($DB->record_exists('user', ['username' => $data['username'],
+                'mnethostid' => $CFG->mnet_localhost_id])
+                || $DB->record_exists('user', ['email' => $data['username'],
+                'mnethostid' => $CFG->mnet_localhost_id])
+                || $authplugin->user_exists($data['username'])) {
+            // Report this as an address that already has an account, not as a
+            // username clash: the person has no notion of a username here, and
+            // telling them to pick another one leaves them with nowhere to go.
             $forgotpassword = new moodle_url('/login/forgot_password.php');
-            $errors['email'] = get_string('emailexists') . ' <a href="' . $forgotpassword->out() . '">' .
+            $errors['username'] = get_string('emailexists') . ' <a href="' . $forgotpassword->out() . '">' .
                 get_string('newpassword') . '?</a>';
         }
 
-        // Check if email is allowed.
-        if (!isset($errors['email'])) {
-            if ($err = email_is_not_allowed($data['email'])) {
-                $errors['email'] = $err;
+        // Check if the address is allowed by the site's allow/deny lists.
+        if (!isset($errors['username'])) {
+            if ($err = email_is_not_allowed($data['username'])) {
+                $errors['username'] = $err;
             }
         }
 

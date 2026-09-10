@@ -23,15 +23,18 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Email-based self-registration with the username as the email address';
+$string['auth_emailasusername_addressnotallowed'] = 'This site does not allow accounts to be created with an address containing that character. Please use a different address, or ask the site administrator to enable extended username characters.';
 $string['auth_emailasusername_description'] = '<p>Email-based self-registration enables a user to create their own account via a \'Create new account\' button on the login page. The user then receives an email containing a secure link to a page where they can confirm their account. Future logins just check the username and password against the stored values in the Moodle database.</p><p>Note: In addition to enabling the plugin, "email-based self-registration with the username as email address" must also be selected from the self registration drop-down menu on the \'Manage authentication\' page.</p>';
+$string['auth_emailasusername_email'] = 'Email address';
+$string['auth_emailasusername_emailconfirm'] = 'Email address (again)';
+$string['auth_emailasusername_emailmismatch'] = 'Email addresses do not match';
+$string['auth_emailasusername_emailmissing'] = 'Missing email address';
+$string['auth_emailasusername_extendedchars'] = 'Addresses with unusual characters are refused';
+$string['auth_emailasusername_extendedchars_desc'] = 'Extended username characters are disabled on this site, so an address containing a character other than a letter, a digit, an underscore, a hyphen, a full stop or an at sign cannot be used to create an account. The plus sign is the common case: an address such as name+moodle@example.com will be refused at signup. To accept these addresses, enable Allow extended characters in usernames in Site administration / Security / Site security settings. That setting applies to every authentication method on the site, not only this one.';
 $string['auth_emailasusername_noemail'] = 'Tried to send you an email but failed!';
 $string['auth_emailasusername_recaptcha'] = 'Adds a visual/audio confirmation form element to the sign-up page for email self-registering users. This protects your site against spammers and contributes to a worthwhile cause. See http://www.google.com/recaptcha for more details.';
 $string['auth_emailasusername_recaptcha_key'] = 'Enable reCAPTCHA element';
 $string['auth_emailasusername_settings'] = 'Settings';
-$string['auth_emailasusername_email'] = 'Email address';
-$string['auth_emailasusername_emailconfirm'] = 'Email address (again)';
-$string['auth_emailasusername_emailmissing'] = 'Missing email address';
-$string['auth_emailasusername_emailmismatch'] = 'Email addresses do not match';
+$string['pluginname'] = 'Email-based self-registration with the username as the email address';
 $string['privacy:metadata:preference:wantsurl'] = 'The address the user was trying to reach when they created their account, kept so they can be returned there once they confirm it. Removed at confirmation.';
 $string['privacy:preference:wantsurl'] = 'The page you were trying to reach when you created your account.';
