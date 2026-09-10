@@ -15,9 +15,8 @@ Feature: Self-registration with the email address as the username
 
   @javascript
   Scenario: An address that is already registered offers password recovery
-    Given I am on site homepage
-    When I press "Create new account"
-    And I set the following fields to these values:
+    Given I visit "/login/signup.php"
+    When I set the following fields to these values:
       | Email address         | taken@example.com |
       | Email address (again) | taken@example.com |
       | Password              | Str0ng-p4ssword!  |
@@ -29,9 +28,8 @@ Feature: Self-registration with the email address as the username
 
   @javascript
   Scenario: The two address fields must agree
-    Given I am on site homepage
-    When I press "Create new account"
-    And I set the following fields to these values:
+    Given I visit "/login/signup.php"
+    When I set the following fields to these values:
       | Email address         | first@example.com |
       | Email address (again) | other@example.com |
       | Password              | Str0ng-p4ssword!  |
@@ -42,9 +40,8 @@ Feature: Self-registration with the email address as the username
 
   @javascript
   Scenario: An address containing a plus sign is refused with an explanation
-    Given I am on site homepage
-    When I press "Create new account"
-    And I set the following fields to these values:
+    Given I visit "/login/signup.php"
+    When I set the following fields to these values:
       | Email address         | someone+moodle@example.com |
       | Email address (again) | someone+moodle@example.com |
       | Password              | Str0ng-p4ssword!           |
@@ -55,9 +52,8 @@ Feature: Self-registration with the email address as the username
 
   @javascript
   Scenario: An address typed with capitals is accepted and stored in lower case
-    Given I am on site homepage
-    When I press "Create new account"
-    And I set the following fields to these values:
+    Given I visit "/login/signup.php"
+    When I set the following fields to these values:
       | Email address         | Mixed.Case@Example.com |
       | Email address (again) | Mixed.Case@Example.com |
       | Password              | Str0ng-p4ssword!       |
