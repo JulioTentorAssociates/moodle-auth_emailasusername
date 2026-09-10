@@ -27,6 +27,7 @@ namespace auth_emailasusername\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\writer;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests for auth_emailasusername\privacy\provider.
@@ -35,8 +36,8 @@ use core_privacy\local\request\writer;
  * @author     Julio Tentor <jtentor@juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[CoversClass(provider::class)]
 final class provider_test extends \core_privacy\tests\provider_testcase {
-
     /**
      * The one preference this plugin stores is declared.
      */

@@ -25,6 +25,13 @@
 
 namespace auth_emailasusername;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+defined('MOODLE_INTERNAL') || die();
+
+global $CFG;
+require_once($CFG->dirroot . '/auth/emailasusername/auth.php');
+
 /**
  * Tests for auth_plugin_emailasusername.
  *
@@ -32,8 +39,8 @@ namespace auth_emailasusername;
  * @author     Julio Tentor <jtentor@juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[CoversClass(\auth_plugin_emailasusername::class)]
 final class auth_test extends \advanced_testcase {
-
     /** @var \auth_plugin_emailasusername The plugin under test. */
     protected $auth;
 
@@ -152,7 +159,7 @@ final class auth_test extends \advanced_testcase {
         $this->assertSame(AUTH_CONFIRM_OK, $this->auth->user_confirm($user->username, 'abc123'));
         $this->assertSame('https://example.com/course/view.php?id=2', $SESSION->wantsurl);
         $this->assertFalse(
-            get_user_preferences(\auth_plugin_emailasusername::WANTSURL_PREFERENCE, false, $user)
+            get_user_preferences(\auth_plugin_emailasusername::WANTSURL_PREFERENCE, false, $user->id)
         );
     }
 
@@ -170,7 +177,7 @@ final class auth_test extends \advanced_testcase {
         $this->assertSame(AUTH_CONFIRM_ERROR, $this->auth->user_confirm($user->username, 'tampered'));
         $this->assertSame(
             'https://example.com/course/view.php?id=3',
-            get_user_preferences(\auth_plugin_emailasusername::WANTSURL_PREFERENCE, false, $user)
+            get_user_preferences(\auth_plugin_emailasusername::WANTSURL_PREFERENCE, false, $user->id)
         );
     }
 
