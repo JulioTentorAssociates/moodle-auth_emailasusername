@@ -39,7 +39,7 @@ class auth_plugin_emailasusername extends auth_plugin_base {
      * because this class is not autoloaded and the provider must not depend on it
      * having been included.
      */
-    const WANTSURL_PREFERENCE = 'auth_emailasusername_wantsurl';
+    public const WANTSURL_PREFERENCE = 'auth_emailasusername_wantsurl';
 
     /**
      * Constructor.
@@ -85,6 +85,11 @@ class auth_plugin_emailasusername extends auth_plugin_base {
         return update_internal_user_password($user, $newpassword);
     }
 
+    /**
+     * Whether this plugin offers self-registration.
+     *
+     * @return bool Always true; self-registration is the entire purpose of the plugin.
+     */
     public function can_signup() {
         return true;
     }
@@ -195,7 +200,7 @@ class auth_plugin_emailasusername extends auth_plugin_base {
             } else if ($user->secret === $confirmsecret && $user->confirmed) {
                 return AUTH_CONFIRM_ALREADY;
 
-            } else if ($user->secret === $confirmsecret) {   // They have provided the secret key to get in
+            } else if ($user->secret === $confirmsecret) {   // They have provided the secret key to get in.
                 $DB->set_field("user", "confirmed", 1, array("id"=>$user->id));
 
                 // Ensure user gets returned to page they were trying to access before signing up.
@@ -214,6 +219,11 @@ class auth_plugin_emailasusername extends auth_plugin_base {
         return AUTH_CONFIRM_ERROR;
     }
 
+    /**
+     * Whether passwords should be kept out of the Moodle user table.
+     *
+     * @return bool Always false; credentials are held by Moodle itself.
+     */
     public function prevent_local_passwords() {
         return false;
     }
@@ -244,7 +254,7 @@ class auth_plugin_emailasusername extends auth_plugin_base {
      * @return moodle_url
      */
     public function change_password_url() {
-        return null; // use default internal method
+        return null; // Use the default internal method.
     }
 
     /**

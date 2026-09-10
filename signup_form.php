@@ -47,14 +47,22 @@ class login_signup_form extends moodleform implements renderable, templatable {
         $mform = $this->_form;
 
         // Username field overriden as the email address.
-        $mform->addElement('text', 'username', get_string('auth_emailasusername_email', 'auth_emailasusername'), 'maxlength="100" size="35" autocapitalize="none"');
+        $mform->addElement('text', 'username',
+            get_string('auth_emailasusername_email', 'auth_emailasusername'),
+            'maxlength="100" size="35" autocapitalize="none"');
         $mform->setType('username', PARAM_NOTAGS);
-        $mform->addRule('username', get_string('auth_emailasusername_emailmissing', 'auth_emailasusername'), 'required', null, 'client');
+        $mform->addRule('username',
+            get_string('auth_emailasusername_emailmissing', 'auth_emailasusername'),
+            'required', null, 'client');
 
         // Email confirmation field.
-        $mform->addElement('text', 'email', get_string('auth_emailasusername_emailconfirm', 'auth_emailasusername'), 'maxlength="100" size="35"');
+        $mform->addElement('text', 'email',
+            get_string('auth_emailasusername_emailconfirm', 'auth_emailasusername'),
+            'maxlength="100" size="35"');
         $mform->setType('email', core_user::get_property_type('email'));
-        $mform->addRule('email', get_string('auth_emailasusername_emailmissing', 'auth_emailasusername'), 'required', null, 'client');
+        $mform->addRule('email',
+            get_string('auth_emailasusername_emailmissing', 'auth_emailasusername'),
+            'required', null, 'client');
         $mform->setForceLtr('email');
 
         // Password policy info.
@@ -208,7 +216,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
             $errors['password'] = $errmsg;
         }
 
-        // Validate customisable profile fields. (profile_validation expects an object as the parameter with userid set)
+        // Validate customisable profile fields; profile_validation expects an object with userid set.
         $dataobject = (object)$data;
         $dataobject->id = 0;
         $errors += profile_validation($dataobject, $files);

@@ -41,11 +41,10 @@ use core_privacy\local\request\writer;
  * @author     Julio Tentor <jtentor@juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+// This plugin stores one user preference and no other personal data.
 class provider implements
-    // This plugin stores one user preference and no other personal data.
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\user_preference_provider {
-
     /**
      * Name of the preference this plugin stores.
      *
@@ -53,7 +52,7 @@ class provider implements
      * referenced: auth.php is not autoloaded, and this class must not depend on it
      * having been included.
      */
-    const WANTSURL_PREFERENCE = 'auth_emailasusername_wantsurl';
+    public const WANTSURL_PREFERENCE = 'auth_emailasusername_wantsurl';
 
     /**
      * Describe the personal data this plugin stores.
