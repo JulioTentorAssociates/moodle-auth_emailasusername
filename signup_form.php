@@ -41,7 +41,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
      * Define the form.
      */
     public function definition() {
-        global $USER, $CFG;
+        global $CFG;
 
         $mform = $this->_form;
 

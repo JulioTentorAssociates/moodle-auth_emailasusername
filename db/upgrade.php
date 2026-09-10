@@ -29,8 +29,6 @@
  * @return bool result
  */
 function xmldb_auth_emailasusername_upgrade($oldversion) {
-    global $CFG, $DB;
-
     if ($oldversion < 2024102300) {
         // No database changes needed for Moodle 4.5+ compatibility update.
         // This version adds privacy API compliance and coding standards improvements.

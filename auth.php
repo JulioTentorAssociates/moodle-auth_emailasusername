@@ -120,7 +120,7 @@ class auth_plugin_emailasusername extends auth_plugin_base {
      * @since Moodle 3.2
      */
     public function user_signup_with_confirmation($user, $notify = true, $confirmationurl = null) {
-        global $CFG, $DB, $SESSION;
+        global $CFG, $SESSION;
         require_once($CFG->dirroot . '/user/profile/lib.php');
         require_once($CFG->dirroot . '/user/lib.php');
 
