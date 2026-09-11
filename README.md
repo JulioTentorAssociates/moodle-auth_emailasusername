@@ -26,16 +26,18 @@ original plugin — not as a claim over it.
 
 ## Status
 
-**Under development. Not ready for installation.**
+**Pre-release. Installed and exercised on Moodle 5.2.2, not yet used in
+production.**
 
 Version 2.1.0 targets Moodle 5.2.2 and later. Support for earlier releases is not
 maintained: a site on Moodle 4.x should stay on version 2.0.0 until it has upgraded
 Moodle itself.
 
 Several defects are fixed and the privacy provider rewritten — see
-[CHANGELOG.md](CHANGELOG.md) — but the plugin has not yet been installed or run on a
-Moodle site, has no automated tests, and `version.php` still declares the earlier
-minimum. Do not deploy it.
+[CHANGELOG.md](CHANGELOG.md). The signup and confirmation paths have been walked
+through by hand on a test site and are covered by PHPUnit and Behat, which run on
+every push against PostgreSQL and MariaDB. `$plugin->maturity` stays at
+`MATURITY_ALPHA` until the plugin has run somewhere real.
 
 ## Requirements
 
@@ -44,12 +46,46 @@ minimum. Do not deploy it.
 
 ## Installation
 
-Not documented yet; this section will be written when the plugin is releasable.
-Upgrading from version 2.0.0 needs no database change and no manual step.
+Place the plugin so that it sits at `auth/emailasusername` inside the Moodle code
+directory — on Moodle 5.x that is `public/auth/emailasusername`. The directory name
+must be `emailasusername`, not the name of this repository, or Moodle will not
+recognise the component.
 
-The plugin directory is `auth/emailasusername`. In addition to enabling the plugin
-under *Site administration → Plugins → Authentication → Manage authentication*, the
-site's self-registration method must be set to this plugin for it to take effect.
+Then visit the site as an administrator to complete the database upgrade, or run
+`php admin/cli/upgrade.php` from the command line.
+
+Two settings have to be changed before anything is visible to a visitor, both under
+*Site administration → Plugins → Authentication → Manage authentication*:
+
+1. Enable **Email-based self-registration with the username as the email address**.
+2. Set **Self registration** to that same plugin. Enabling it is not enough; the
+   site chooses one self-registration method and this setting is where it does so.
+
+### Site settings worth knowing about
+
+**Authentication instructions.** Found under *Site administration → Plugins →
+Authentication → Manage authentication*, or by searching the admin interface for
+`auth_instructions`. This field is shared by every authentication method on the
+site, not owned by any plugin. Whether it is filled in changes how the login page
+presents the link to create an account, and in the Boost theme the instructions
+themselves are shown only on narrow viewports. An administrator who fills the field
+and sees no change on a desktop browser is looking at theme behaviour, not at a
+fault in this plugin.
+
+**Extended username characters.** Found under *Site administration → Security →
+Site security settings*. While it is off, which is the Moodle default, an address
+containing a character Moodle does not accept in a username cannot be used to
+create an account. The plus sign is the case that matters: `name+tag@example.com`
+is common, and it is refused. The signup form says so in plain words and the plugin
+settings page shows the same notice while the setting is off. Turning it on accepts
+those addresses, and applies to every authentication method on the site.
+
+### Upgrading from version 2.0.0
+
+No database change and no manual step. Accounts, their `auth` value and their
+profile data are untouched. One behaviour changes: a user who registered under
+2.0.0 and confirms after the upgrade lands on the site home page rather than the
+page they were originally trying to reach. See [CHANGELOG.md](CHANGELOG.md).
 
 ## Licence
 
