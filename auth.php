@@ -169,8 +169,11 @@ class auth_plugin_emailasusername extends auth_plugin_base {
     public function signup_form() {
         global $CFG;
 
-        require_once($CFG->dirroot . "/auth/emailasusername/signup_form.php");
-        return new login_signup_form(null, null, 'post', '', ['autocomplete' => 'on']);
+        require_once($CFG->libdir . '/formslib.php');
+        require_once($CFG->dirroot . '/user/profile/lib.php');
+        require_once($CFG->dirroot . '/user/editlib.php');
+
+        return new \auth_emailasusername\form\signup_form(null, null, 'post', '', ['autocomplete' => 'on']);
     }
 
     /**

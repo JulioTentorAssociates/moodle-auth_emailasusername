@@ -20,14 +20,10 @@
  * @copyright  2016 onwards David Pesce (http://exputo.com)
  * @copyright  2026 Julio Tentor & Associates <https://juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @package auth_emailasusername
+ * @package    auth_emailasusername
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->libdir . '/formslib.php');
-require_once($CFG->dirroot . '/user/profile/lib.php');
-require_once($CFG->dirroot . '/user/editlib.php');
+namespace auth_emailasusername\form;
 
 /**
  * Signup form presenting the email address as the username.
@@ -36,7 +32,7 @@ require_once($CFG->dirroot . '/user/editlib.php');
  * @copyright  2026 Julio Tentor & Associates <https://juliotentor.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class login_signup_form extends moodleform implements renderable, templatable {
+class signup_form extends \moodleform implements \renderable, \templatable {
     /**
      * Define the form.
      */
@@ -68,7 +64,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
             get_string('auth_emailasusername_emailconfirm', 'auth_emailasusername'),
             'maxlength="100" size="35"'
         );
-        $mform->setType('email', core_user::get_property_type('email'));
+        $mform->setType('email', \core_user::get_property_type('email'));
         $mform->addRule(
             'email',
             get_string('auth_emailasusername_emailmissing', 'auth_emailasusername'),
@@ -89,7 +85,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
             'size' => 12,
             'autocomplete' => 'new-password',
         ]);
-        $mform->setType('password', core_user::get_property_type('password'));
+        $mform->setType('password', \core_user::get_property_type('password'));
         $mform->addRule('password', get_string('missingpassword'), 'required', null, 'client');
         $mform->addRule(
             'password',
@@ -102,7 +98,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
         $namefields = useredit_get_required_name_fields();
         foreach ($namefields as $field) {
             $mform->addElement('text', $field, get_string($field), 'maxlength="100" size="30"');
-            $mform->setType($field, core_user::get_property_type('firstname'));
+            $mform->setType($field, \core_user::get_property_type('firstname'));
             $stringid = 'missing' . $field;
             if (!get_string_manager()->string_exists($stringid, 'moodle')) {
                 $stringid = 'required';
@@ -160,7 +156,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
      * @return string The value in lower case.
      */
     public function normalise_address($value) {
-        return core_text::strtolower($value);
+        return \core_text::strtolower($value);
     }
 
     /**
@@ -217,7 +213,7 @@ class login_signup_form extends moodleform implements renderable, templatable {
             // Report this as an address that already has an account, not as a
             // username clash: the person has no notion of a username here, and
             // telling them to pick another one leaves them with nowhere to go.
-            $forgotpassword = new moodle_url('/login/forgot_password.php');
+            $forgotpassword = new \moodle_url('/login/forgot_password.php');
             $errors['username'] = get_string('emailexists') . ' <a href="' . $forgotpassword->out() . '">' .
                 get_string('newpassword') . '?</a>';
         }
@@ -245,10 +241,10 @@ class login_signup_form extends moodleform implements renderable, templatable {
     /**
      * Export this data so it can be used as the context for a mustache template.
      *
-     * @param renderer_base $output Used to do a final render of any components that need to be rendered for export.
+     * @param \renderer_base $output Used to do a final render of any components that need to be rendered for export.
      * @return array
      */
-    public function export_for_template(renderer_base $output) {
+    public function export_for_template(\renderer_base $output) {
         ob_start();
         $this->display();
         $formhtml = ob_get_contents();
