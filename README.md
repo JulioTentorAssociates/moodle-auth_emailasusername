@@ -1,5 +1,9 @@
 # moodle-auth_emailasusername
 
+![Moodle Plugin](https://img.shields.io/badge/Moodle_5.2+-Plugin-orange?style=flat&logo=moodle)
+![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat&logo=php&logoColor=white)
+![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg?style=flat&logo=gnu&logoColor=white)
+
 Moodle authentication plugin providing email-based self-registration with the email
 address as the username.
 
