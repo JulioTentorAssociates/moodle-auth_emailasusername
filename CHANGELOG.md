@@ -3,7 +3,7 @@
 All notable changes to this plugin are recorded here. Versions follow the
 `$plugin->release` value in `version.php`.
 
-## [2.1.0] — unreleased
+## [2.1.0]
 
 First release from Julio Tentor & Associates. It continues
 [David Pesce's plugin](https://github.com/davidpesce/moodle-auth_emailasusername)

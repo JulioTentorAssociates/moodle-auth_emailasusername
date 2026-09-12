@@ -29,5 +29,5 @@ $plugin->component = 'auth_emailasusername';
 $plugin->version   = 2026090800;
 $plugin->requires  = 2026042002; // Moodle 5.2.2.
 $plugin->supported = [502, 502];
-$plugin->maturity  = MATURITY_ALPHA;
+$plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '2.1.0';

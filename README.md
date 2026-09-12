@@ -3,6 +3,20 @@
 Moodle authentication plugin providing email-based self-registration with the email
 address as the username.
 
+## Why
+
+Every application a learner uses today identifies them by their email address, and
+Moodle itself has long accepted either the username or the address at the login
+form. Account creation is where that stops: the signup form still asks for a
+username, and the person has to invent one and then remember it.
+
+Nothing in Moodle needs them to. Accounts are keyed internally by a numeric id;
+`username` and `email` are ordinary columns with a unique constraint, and an
+administrator can change either of them on an existing account without consequence.
+
+This plugin removes the question. The address becomes the username at signup, and
+the person has one credential to remember instead of two.
+
 ## Origin and attribution
 
 This plugin continues
@@ -26,18 +40,16 @@ original plugin — not as a claim over it.
 
 ## Status
 
-**Pre-release. Installed and exercised on Moodle 5.2.2, not yet used in
-production.**
+**In production.** Version 2.1.0 runs on the Julio Tentor & Associates Moodle site,
+where the upgrade from version 2.0.0 was carried out and verified.
 
-Version 2.1.0 targets Moodle 5.2.2 and later. Support for earlier releases is not
-maintained: a site on Moodle 4.x should stay on version 2.0.0 until it has upgraded
-Moodle itself.
+It targets Moodle 5.2.2 and later. Support for earlier releases is not maintained:
+a site on Moodle 4.x should stay on version 2.0.0 until it has upgraded Moodle
+itself.
 
 Several defects are fixed and the privacy provider rewritten — see
-[CHANGELOG.md](CHANGELOG.md). The signup and confirmation paths have been walked
-through by hand on a test site and are covered by PHPUnit and Behat, which run on
-every push against PostgreSQL and MariaDB. `$plugin->maturity` stays at
-`MATURITY_ALPHA` until the plugin has run somewhere real.
+[CHANGELOG.md](CHANGELOG.md). The signup and confirmation paths are covered by
+PHPUnit and Behat, which run on every push against PostgreSQL and MariaDB.
 
 ## Requirements
 
